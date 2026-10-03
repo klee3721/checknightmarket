@@ -1,0 +1,21 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+node_modules/
+profiles/
+runtime/
+results/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Account workbooks can contain Riot credentials. Keep only explicit dummy CSV samples.
+*.xlsx
+*.xls
+accounts.csv
+accounts-*.csv
+*-accounts.csv
+!sample-accounts.csv

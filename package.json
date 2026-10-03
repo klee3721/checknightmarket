@@ -1,0 +1,21 @@
+{
+  "name": "nightmarket-checker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local multi-profile Riot/Menzu Night Market checker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "check": "node --check server.js && node --check src/automation.js && node --check src/account-store.js && node --check public/app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "playwright-core": "^1.55.0",
+    "read-excel-file": "^9.3.10"
+  }
+}

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Night Market Checker</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff4655'/%3E%3Cpath d='M8 23V9h4l4 7 4-7h4v14h-4v-7l-4 6-4-6v7z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">LOCAL AUTOMATION</p>
+      <h1>Night Market Checker</h1>
+      <p class="subtitle">Nhiều profile độc lập · không lưu mật khẩu · log theo thời gian thực</p>
+    </div>
+    <span id="run-state" class="pill muted">Đang tải</span>
+  </header>
+
+  <main>
+    <nav class="page-tabs" aria-label="Khu vực dashboard">
+      <button id="tab-running" class="page-tab active" type="button" role="tab" aria-selected="true" aria-controls="page-running">Đang chạy</button>
+      <button id="tab-completed" class="page-tab" type="button" role="tab" aria-selected="false" aria-controls="page-completed">Đã check thành công <span id="completed-count" class="tab-count">0</span></button>
+    </nav>
+
+    <div id="page-running" class="tab-page" role="tabpanel" aria-labelledby="tab-running">
+    <section class="panel setup-grid">
+      <div>
+        <span class="step">01</span>
+        <h2>Nạp danh sách</h2>
+        <p>Excel/CSV gồm hai cột <code>id</code> và <code>pass</code>. Tài khoản chỉ giữ trong RAM.</p>
+        <form id="upload-form" class="file-row">
+          <input id="accounts-file" name="accounts" type="file" accept=".xlsx,.csv" required>
+          <button type="submit">Nạp file</button>
+        </form>
+      </div>
+
+      <div>
+        <span class="step">02</span>
+        <h2>Cấu hình luồng</h2>
+        <div class="controls compact">
+          <label>Số luồng
+            <input id="worker-count" type="number" min="1" max="10" value="1">
+          </label>
+          <label class="check"><input id="headless" type="checkbox"> Chạy ngầm</label>
+          <label class="check"><input id="preview-enabled" type="checkbox" checked> Ảnh xem trước</label>
+          <label class="check"><input id="close-riot-after-token" type="checkbox"> Đóng Chrome Riot sau mỗi tài khoản</label>
+          <button id="apply-config" type="button">Áp dụng</button>
+        </div>
+      </div>
+
+      <div>
+        <span class="step">03</span>
+        <h2>Chạy hàng đợi</h2>
+        <p>Mở từng luồng và đăng nhập Menzu một lần. Ở chế độ hiện, hãy tự đăng nhập Riot rồi bấm nút tiếp tục. Nếu giữ Chrome Riot, ứng dụng sẽ đăng xuất và dùng lại cửa sổ đó cho tài khoản kế tiếp.</p>
+        <div class="controls">
+          <button id="start" type="button" class="primary">Bắt đầu tất cả</button>
+          <button id="stop" type="button" class="danger">Dừng sau tài khoản hiện tại</button>
+          <button id="retry" type="button">Chạy lại lỗi</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Tiến độ">
+      <article><span>Tổng</span><strong id="stat-total">0</strong></article>
+      <article><span>Đang chờ</span><strong id="stat-queued">0</strong></article>
+      <article><span>Đang chạy</span><strong id="stat-running">0</strong></article>
+      <article class="success"><span>Thành công</span><strong id="stat-success">0</strong></article>
+      <article class="failed"><span>Lỗi</span><strong id="stat-failed">0</strong></article>
+    </section>
+
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">PROFILES</p>
+        <h2>Các luồng trình duyệt</h2>
+      </div>
+      <p>Mỗi luồng có cookie và dữ liệu riêng.</p>
+    </section>
+    <section id="workers" class="workers"></section>
+
+    <section class="split">
+      <div class="panel">
+        <div class="section-heading inline">
+          <div><p class="eyebrow">QUEUE</p><h2>Tài khoản</h2></div>
+        </div>
+        <div class="account-toolbar">
+          <label class="check"><input id="select-all-accounts" type="checkbox"> Chọn tất cả</label>
+          <span id="selection-summary" class="selection-summary">Chưa chọn tài khoản</span>
+          <button id="remove-completed-accounts" type="button" class="small">Check trùng đã thành công</button>
+          <button id="clear-account-selection" type="button" class="small" disabled>Bỏ chọn</button>
+          <button id="delete-selected-accounts" type="button" class="small danger" disabled>Xóa đã chọn</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th class="select-column">Chọn</th><th>#</th><th>ID</th><th>Trạng thái</th><th>Luồng</th><th>Kết quả</th></tr></thead>
+            <tbody id="accounts"><tr><td colspan="6" class="empty">Chưa nạp file</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel log-panel">
+        <div class="section-heading inline">
+          <div><p class="eyebrow">LIVE LOG</p><h2>Nhật ký</h2></div>
+          <button id="clear-log" type="button" class="small">Xóa màn hình log</button>
+        </div>
+        <div id="logs" class="logs"><p class="empty">Chưa có sự kiện</p></div>
+      </div>
+    </section>
+    </div>
+
+    <section id="page-completed" class="tab-page panel completed-panel" role="tabpanel" aria-labelledby="tab-completed" hidden>
+      <div class="section-heading inline">
+        <div>
+          <p class="eyebrow">RESULTS WORKSPACE</p>
+          <h2>Danh sách tài khoản đã check thành công</h2>
+          <p>Đọc trực tiếp từ thư mục <code>results/</code> và vẫn còn sau khi restart server.</p>
+        </div>
+        <button id="refresh-results" type="button" class="small">Làm mới</button>
+      </div>
+      <div class="table-wrap completed-table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>ID</th><th>Ảnh Night Market</th><th>Hoàn tất lúc</th><th>Luồng</th></tr></thead>
+          <tbody id="completed-results"><tr><td colspan="5" class="empty">Đang đọc kết quả...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

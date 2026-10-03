@@ -1,0 +1,144 @@
+{
+  "port": 3210,
+  "urls": {
+    "riotHome": "https://www.riotgames.com/vi",
+    "menzuCheck": "https://menzu.lol/checkskin"
+  },
+  "timeouts": {
+    "navigationMs": 60000,
+    "actionMs": 15000,
+    "loginVisibleMs": 300000,
+    "loginHeadlessMs": 60000,
+    "checkResultMs": 120000,
+    "tokenMs": 120000
+  },
+  "selectors": {
+    "riot": {
+      "cookieButtons": [
+        ".osano-cm-denyAll",
+        ".osano-cm-accept-all",
+        "button:has-text('Từ chối những thứ không cần thiết')",
+        "button:has-text('Chấp nhận tất cả')"
+      ],
+      "loginButtons": [
+        "a.riotbar-account-action",
+        "a[href*='login']",
+        "button:has-text('Đăng Nhập')",
+        "button:has-text('Đăng nhập')",
+        "a:has-text('Đăng Nhập')",
+        "a:has-text('Đăng nhập')",
+        "button:has-text('Sign In')",
+        "a:has-text('Sign In')"
+      ],
+      "usernameInputs": [
+        "input[name='username']",
+        "input[autocomplete='username']",
+        "input[type='text']"
+      ],
+      "passwordInputs": [
+        "input[name='password']",
+        "input[autocomplete='current-password']",
+        "input[type='password']"
+      ],
+      "submitButtons": [
+        "button[data-testid='btn-signin-submit']",
+        "button[type='submit']",
+        "button:has-text('Đăng nhập')",
+        "button:has-text('Sign in')"
+      ],
+      "twoFactorInputs": [
+        "input[autocomplete='one-time-code']",
+        "input[name*='code' i]",
+        "input[inputmode='numeric']"
+      ],
+      "loginErrors": [
+        "text=/Tên đăng nhập hoặc mật khẩu của bạn có thể không đúng/i",
+        "text=/username or password.*incorrect/i",
+        "[data-testid*='error' i]"
+      ],
+      "accountMenus": [
+        "button[aria-label*='account' i]",
+        "button[aria-label*='tài khoản' i]",
+        "button[aria-label*='profile' i]"
+      ],
+      "logoutButtons": [
+        "button:has-text('Đăng xuất')",
+        "a:has-text('Đăng xuất')",
+        "button:has-text('Sign Out')",
+        "a:has-text('Sign Out')"
+      ]
+    },
+    "menzu": {
+      "riotLoginButtons": [
+        "button:has-text('Đăng nhập Riot Games')",
+        "button:has-text('Riot Games')",
+        "a:has-text('Đăng nhập Riot Games')",
+        "a:has-text('Riot Games')"
+      ],
+      "authorizeButtons": [
+        "button:has-text('Authorize')",
+        "button:has-text('Cho phép')",
+        "button:has-text('Đồng ý')",
+        "button[type='submit']"
+      ],
+      "tokenInputs": [
+        "textarea[placeholder*='token' i]",
+        "input[placeholder*='token' i]",
+        "textarea[placeholder*='link' i]",
+        "input[placeholder*='link' i]",
+        "textarea"
+      ],
+      "checkButtons": [
+        "button:has-text('Tiến hành check')",
+        "button:has-text('Check')",
+        "button[type='submit']"
+      ],
+      "archiveCards": [
+        "[data-account-id]",
+        "[class*='account-card' i]",
+        "[class*='accountCard' i]",
+        "[class*='archive'] [class*='card']",
+        "[class*='storage'] [class*='card']"
+      ],
+      "nightMarketTabs": [
+        "button:has-text('Night Market')",
+        "button:has-text('Night market')",
+        "button:has-text('Chợ Đêm')",
+        "button:has-text('Chợ đêm')",
+        "[role='tab']:has-text('Night Market')",
+        "[role='tab']:has-text('Chợ Đêm')"
+      ],
+      "nightMarketCards": [
+        "[class*='aspect-[240/445]'][class*='cursor-pointer']",
+        "[data-testid*='night-market-card']",
+        "[class*='night-market-card' i]",
+        "[class*='nightMarketCard' i]",
+        "[class*='nightmarket'] [class*='card']",
+        "[class*='night-market'] button"
+      ],
+      "nightMarketPanels": [
+        "[class*='min-h-[500px]']:has-text('NIGHT MARKET')",
+        "[data-testid*='night-market']",
+        "[class*='night-market' i]",
+        "[class*='nightMarket' i]",
+        "section:has-text('Night Market')",
+        "section:has-text('Chợ Đêm')"
+      ],
+      "deleteButtons": [
+        "button[aria-label*='xóa' i]",
+        "button[aria-label*='xoá' i]",
+        "button[title*='xóa' i]",
+        "button[title*='xoá' i]",
+        "button:has(svg[data-icon*='trash'])",
+        "button:has-text('Xóa')",
+        "button:has-text('Xoá')"
+      ],
+      "confirmDeleteButtons": [
+        "[role='dialog'] button:has-text('Xóa')",
+        "[role='dialog'] button:has-text('Xoá')",
+        "[role='dialog'] button:has-text('Đồng ý')",
+        "[role='dialog'] button:has-text('Confirm')"
+      ]
+    }
+  }
+}
